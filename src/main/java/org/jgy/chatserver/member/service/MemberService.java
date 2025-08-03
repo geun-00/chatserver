@@ -24,6 +24,7 @@ public class MemberService {
         }
 
         String encodedPassword = passwordEncoder.encode(memberSaveRequestDto.email());
+        String encodedPassword = passwordEncoder.encode(memberSaveRequestDto.password());
 
         Member savedMember = memberRepository.save(memberSaveRequestDto.toEntity(encodedPassword));
 
