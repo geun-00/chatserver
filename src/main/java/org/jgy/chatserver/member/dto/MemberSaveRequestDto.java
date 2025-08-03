@@ -7,11 +7,11 @@ public record MemberSaveRequestDto(
         String email,
         String password)
 {
-    public Member toEntity() {
+    public Member toEntity(String encodedPassword) {
         return Member.builder()
                      .name(name)
                      .email(email)
-                     .password(password)
+                     .password(encodedPassword)
                      .build();
     }
 }
