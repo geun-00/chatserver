@@ -1,6 +1,8 @@
 package org.jgy.chatserver.member.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.jgy.chatserver.member.dto.MemberLoginRequestDto;
+import org.jgy.chatserver.member.dto.MemberLoginResponseDto;
 import org.jgy.chatserver.member.dto.MemberSaveRequestDto;
 import org.jgy.chatserver.member.dto.MemberSaveResponseDto;
 import org.jgy.chatserver.member.service.MemberService;
@@ -22,5 +24,11 @@ public class MemberController {
     public ResponseEntity<?> memberCreate(@RequestBody MemberSaveRequestDto memberSaveRequestDto) {
         MemberSaveResponseDto memberSaveResponseDto = memberService.create(memberSaveRequestDto);
         return new ResponseEntity<>(memberSaveResponseDto, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/doLogin")
+    public ResponseEntity<?> doLogin(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
+        MemberLoginResponseDto memberLoginResponseDto = memberService.login(memberLoginRequestDto);
+        return new ResponseEntity<>(memberLoginResponseDto, HttpStatus.OK);
     }
 }
