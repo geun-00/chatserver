@@ -16,3 +16,7 @@ spring:
       hibernate:
         format_sql: true
         highlight_sql: true
+
+jwt:
+  secretKey: ${JWT_SECRET_KEY}
+  expiration: ${JWT_EXPIRATION}
