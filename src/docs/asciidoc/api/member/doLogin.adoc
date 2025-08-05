@@ -1,0 +1,10 @@
+[[member-doLgoin]]
+=== 회원 인증
+
+==== HTTP Request
+include::{snippets}/member-doLogin/http-request.adoc[]
+include::{snippets}/member-doLogin/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/member-doLogin/http-response.adoc[]
+include::{snippets}/member-doLogin/response-fields.adoc[]

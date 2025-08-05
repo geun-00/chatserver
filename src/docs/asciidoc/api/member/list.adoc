@@ -1,0 +1,11 @@
+[[member-list]]
+=== 회원 목록
+
+==== HTTP Request
+
+include::{snippets}/member-list/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/member-list/http-response.adoc[]
+include::{snippets}/member-list/response-fields.adoc[]

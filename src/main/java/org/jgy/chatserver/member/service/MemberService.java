@@ -6,12 +6,15 @@ import org.jgy.chatserver.common.auth.JwtProvider;
 import org.jgy.chatserver.member.domain.Member;
 import org.jgy.chatserver.member.dto.MemberLoginRequestDto;
 import org.jgy.chatserver.member.dto.MemberLoginResponseDto;
+import org.jgy.chatserver.member.dto.MemberResponseDto;
 import org.jgy.chatserver.member.dto.MemberSaveRequestDto;
 import org.jgy.chatserver.member.dto.MemberSaveResponseDto;
 import org.jgy.chatserver.member.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -46,5 +49,12 @@ public class MemberService {
 
         String accessToken = jwtProvider.createToken(member.getEmail(), member.getRole().toString());
         return new MemberLoginResponseDto(member.getId(), accessToken);
+    }
+
+    public List<MemberResponseDto> findAll() {
+        return memberRepository.findAll()
+                               .stream()
+                               .map(MemberResponseDto::from)
+                               .toList();
     }
 }
