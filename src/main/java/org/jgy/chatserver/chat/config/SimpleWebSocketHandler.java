@@ -1,7 +1,6 @@
 package org.jgy.chatserver.chat.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -15,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 
 @Slf4j
-@Component
+//@Component
 public class SimpleWebSocketHandler extends TextWebSocketHandler {
 
     //스레드 세이프한 자료 구조 사용
