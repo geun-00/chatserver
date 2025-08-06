@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/member/create", "/member/doLogin").permitAll()
+                        .requestMatchers("/connect").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->

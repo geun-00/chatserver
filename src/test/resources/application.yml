@@ -1,0 +1,3 @@
+jwt:
+  secretKey: secret
+  expiration: 1
