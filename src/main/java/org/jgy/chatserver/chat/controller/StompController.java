@@ -3,6 +3,7 @@ package org.jgy.chatserver.chat.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jgy.chatserver.chat.dto.ChatMsgRequestDto;
+import org.jgy.chatserver.chat.service.ChatService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 public class StompController {
 
     private final SimpMessageSendingOperations messageTemplate;
+    private final ChatService chatService;
 
     /**
      * 방법1 - MessageMapping(수신)과 SendTo(topic에 메시지 전달) 한꺼번에 처리
@@ -42,6 +44,7 @@ public class StompController {
     @MessageMapping("/{roomId}")
     public void sendMessage(@DestinationVariable Long roomId, ChatMsgRequestDto chatMsgRequestDto) {
         log.debug(chatMsgRequestDto.message());
+        chatService.saveMessage(roomId, chatMsgRequestDto);
         messageTemplate.convertAndSend("/topic/" + roomId, chatMsgRequestDto);
     }
 }
