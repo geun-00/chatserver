@@ -5,6 +5,7 @@ import org.jgy.chatserver.chat.domain.ChatParticipant;
 import org.jgy.chatserver.chat.domain.ChatRoom;
 import org.jgy.chatserver.chat.domain.ReadStatus;
 import org.jgy.chatserver.chat.dto.ChatMsgRequestDto;
+import org.jgy.chatserver.chat.dto.ChatRoomListResponseDto;
 import org.jgy.chatserver.chat.repository.ChatMessageRepository;
 import org.jgy.chatserver.chat.repository.ChatRoomRepository;
 import org.jgy.chatserver.chat.repository.ReadStatusRepository;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 
 @SpringBootTest
 @Transactional
@@ -117,5 +119,40 @@ class ChatServiceTest {
         assertThat(participants).contains(participant);
         assertThat(participant.getChatRoom()).isEqualTo(savedChatRoom);
         assertThat(participant.getMember()).isEqualTo(creator);
+    }
+
+    @Test
+    @DisplayName("그룹 채팅 목록 조회")
+    void getGroupChatRooms() {
+        //given
+        String roomName = "my-room";
+
+        ChatRoom groupChat1 = chatRoomRepository.save(ChatRoom.builder()
+                                                              .isGroupChat("Y")
+                                                              .name(roomName)
+                                                              .build()
+        );
+        ChatRoom noGroupChat = chatRoomRepository.save(ChatRoom.builder()
+                                                               .isGroupChat("N")
+                                                               .name(roomName)
+                                                               .build()
+        );
+        ChatRoom groupChat2 = chatRoomRepository.save(ChatRoom.builder()
+                                                              .isGroupChat("Y")
+                                                              .name(roomName)
+                                                              .build()
+        );
+
+        //when
+        List<ChatRoomListResponseDto> chatRooms = chatService.getGroupChatRooms();
+
+        //then
+        assertThat(chatRooms)
+                .hasSize(2)
+                .extracting("roomId", "roomName")
+                .containsExactly(
+                        tuple(groupChat1.getId(), roomName),
+                        tuple(groupChat2.getId(), roomName)
+                ).doesNotContain(tuple(noGroupChat.getId(), roomName));
     }
 }

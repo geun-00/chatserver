@@ -1,21 +1,33 @@
 package org.jgy.chatserver.chat.controller;
 
 import org.jgy.chatserver.RestDocsSupport;
+import org.jgy.chatserver.chat.dto.ChatRoomListResponseDto;
 import org.jgy.chatserver.chat.service.ChatService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.core.Authentication;
+
+import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseBody;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ChatControllerTest extends RestDocsSupport {
@@ -50,6 +62,36 @@ class ChatControllerTest extends RestDocsSupport {
                        requestHeaders(
                                headerWithName(HttpHeaders.AUTHORIZATION).description("Bearer 토큰")
                        )
+               ));
+    }
+
+    @Test
+    @DisplayName("그룹 채팅 목록 조회")
+    void getGroupChatRooms() throws Exception {
+        //given
+        List<ChatRoomListResponseDto> response = List.of(
+                new ChatRoomListResponseDto(1L, "my-room-1"),
+                new ChatRoomListResponseDto(2L, "my-room-2"),
+                new ChatRoomListResponseDto(3L, "my-room-3")
+        );
+
+        given(chatService.getGroupChatRooms()).willReturn(response);
+
+        //when
+        //then
+        mockMvc.perform(get("/chat/room/group/list"))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.length()").value(response.size()))
+               .andDo(print())
+               .andDo(document("chat-room-list",
+                       preprocessRequest(prettyPrint()),
+                       preprocessResponse(prettyPrint()),
+
+                       responseFields(
+                               fieldWithPath("[].roomId").type(JsonFieldType.NUMBER).description("채팅방 아이디"),
+                               fieldWithPath("[].roomName").type(JsonFieldType.STRING).description("채팅방 이름")
+                       ),
+                       responseBody()
                ));
     }
 }

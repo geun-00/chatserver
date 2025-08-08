@@ -7,6 +7,7 @@ import org.jgy.chatserver.chat.domain.ChatParticipant;
 import org.jgy.chatserver.chat.domain.ChatRoom;
 import org.jgy.chatserver.chat.domain.ReadStatus;
 import org.jgy.chatserver.chat.dto.ChatMsgRequestDto;
+import org.jgy.chatserver.chat.dto.ChatRoomListResponseDto;
 import org.jgy.chatserver.chat.repository.ChatMessageRepository;
 import org.jgy.chatserver.chat.repository.ChatParticipantRepository;
 import org.jgy.chatserver.chat.repository.ChatRoomRepository;
@@ -97,5 +98,15 @@ public class ChatService {
         //저장
         chatRoomRepository.save(chatRoom);
         chatParticipantRepository.save(chatParticipant);
+    }
+
+    /**
+     * 그룹 채팅 목록 조회
+     */
+    public List<ChatRoomListResponseDto> getGroupChatRooms() {
+        return chatRoomRepository.findByIsGroupChat("Y")
+                                 .stream()
+                                 .map(ChatRoomListResponseDto::from)
+                                 .toList();
     }
 }

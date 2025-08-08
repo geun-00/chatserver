@@ -1,14 +1,19 @@
 package org.jgy.chatserver.chat.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.jgy.chatserver.chat.dto.ChatRoomListResponseDto;
 import org.jgy.chatserver.chat.service.ChatService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/chat")
@@ -26,5 +31,15 @@ public class ChatController {
     ) {
         chatService.createGroupRoom(roomName, authentication.getName());
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 그룹 채팅 목록 조회
+     */
+    @GetMapping("/room/group/list")
+    public ResponseEntity<?> getGroupChatRooms() {
+        List<ChatRoomListResponseDto> chatRooms = chatService.getGroupChatRooms();
+
+        return new ResponseEntity<>(chatRooms, HttpStatus.OK);
     }
 }

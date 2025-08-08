@@ -1,0 +1,11 @@
+[[chat-room-list]]
+=== 그룹 채팅방 목록
+
+==== HTTP Request
+
+include::{snippets}/chat-room-list/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/chat-room-list/response-body.adoc[]
+include::{snippets}/chat-room-list/response-fields.adoc[]
