@@ -1,0 +1,11 @@
+[[create-group-room]]
+=== 그룹 채팅방 개설
+
+==== HTTP Request
+
+include::{snippets}/chat-room-group-create/http-request.adoc[]
+include::{snippets}/chat-room-group-create/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/chat-room-group-create/http-response.adoc[]

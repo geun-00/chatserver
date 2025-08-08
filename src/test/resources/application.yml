@@ -1,3 +1,11 @@
+spring:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+
 jwt:
   secretKey: secret
   expiration: 1

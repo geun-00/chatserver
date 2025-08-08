@@ -49,6 +49,8 @@ public class ChatService {
                                              .member(sender)
                                              .content(chatMsgRequestDto.message())
                                              .build();
+        //연관 관계 메서드
+        chatRoom.addChatMessage(chatMessage);
 
         chatMessageRepository.save(chatMessage);
 
@@ -65,5 +67,35 @@ public class ChatService {
 
             readStatusRepository.save(readStatus);
         }
+    }
+
+    /**
+     * 그룹 채팅방 개설
+     *
+     * @param roomName 채팅방 이름
+     * @param email    개설자 정보
+     */
+    @Transactional
+    public void createGroupRoom(String roomName, String email) {
+        //1. 채팅방을 개설하는 사용자
+        Member creator = memberRepository.findByEmail(email)
+                                         .orElseThrow(() -> new EntityNotFoundException("Cannot find Member for : " + email));
+        //2. 채팅방 개설
+        ChatRoom chatRoom = ChatRoom.builder()
+                                    .name(roomName)
+                                    .isGroupChat("Y")
+                                    .build();
+
+        //3. 채팅 참여자로 개설자를 추가
+        ChatParticipant chatParticipant = ChatParticipant.builder()
+                                                         .chatRoom(chatRoom)
+                                                         .member(creator)
+                                                         .build();
+        //연관 관계 메서드
+        chatRoom.addParticipant(chatParticipant);
+
+        //저장
+        chatRoomRepository.save(chatRoom);
+        chatParticipantRepository.save(chatParticipant);
     }
 }
