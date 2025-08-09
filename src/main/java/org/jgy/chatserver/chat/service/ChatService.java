@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -108,5 +109,32 @@ public class ChatService {
                                  .stream()
                                  .map(ChatRoomListResponseDto::from)
                                  .toList();
+    }
+
+    /**
+     * 그룹 채팅방 참여
+     * @param roomId 채팅방 아이디
+     * @param email 참여자 정보
+     */
+    @Transactional
+    public void addParticipantToGroupChat(Long roomId, String email) {
+        //1. 채팅방 조회
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
+                                              .orElseThrow(() -> new EntityNotFoundException("Cannot find ChatRoom for : " + roomId));
+        //2. 참여자 조회
+        Member member = memberRepository.findByEmail(email)
+                                        .orElseThrow(() -> new EntityNotFoundException("Cannot find Member for : " + email));
+        //이미 참여자인지 검증
+        Optional<ChatParticipant> participant = chatParticipantRepository.findByChatRoomAndMember(chatRoom, member);
+        if (participant.isPresent()) {
+            return;
+        }
+
+        //3. ChatParticipant 저장
+        ChatParticipant chatParticipant = ChatParticipant.builder()
+                                                         .chatRoom(chatRoom)
+                                                         .member(member)
+                                                         .build();
+        chatParticipantRepository.save(chatParticipant);
     }
 }

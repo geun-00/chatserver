@@ -1,0 +1,12 @@
+[[chat-room-list]]
+=== 그룹 채팅방 참여
+
+==== HTTP Request
+
+include::{snippets}/chat-room-join/http-request.adoc[]
+include::{snippets}/chat-room-join/request-headers.adoc[]
+include::{snippets}/chat-room-join/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/chat-room-join/http-response.adoc[]

@@ -18,3 +18,12 @@ include::api/member/member.adoc[]
 include::api/member/doLogin.adoc[]
 '''
 include::api/member/list.adoc[]
+
+[[Chat-API]]
+== Chat API
+
+include::api/chat/create-chat.adoc[]
+'''
+include::api/chat/room-list.adoc[]
+'''
+include::api/chat/room-join.adoc[]

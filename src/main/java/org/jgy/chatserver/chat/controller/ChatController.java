@@ -5,9 +5,10 @@ import org.jgy.chatserver.chat.dto.ChatRoomListResponseDto;
 import org.jgy.chatserver.chat.service.ChatService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,9 +28,9 @@ public class ChatController {
     @PostMapping("/room/group/create")
     public ResponseEntity<?> createGroupRoom(
             @RequestParam String roomName,
-            @AuthenticationPrincipal Authentication authentication
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        chatService.createGroupRoom(roomName, authentication.getName());
+        chatService.createGroupRoom(roomName, userDetails.getUsername());
         return ResponseEntity.ok().build();
     }
 
@@ -41,5 +42,17 @@ public class ChatController {
         List<ChatRoomListResponseDto> chatRooms = chatService.getGroupChatRooms();
 
         return new ResponseEntity<>(chatRooms, HttpStatus.OK);
+    }
+
+    /**
+     * 그룹 채팅방 참여
+     */
+    @PostMapping("/room/group/{roomId}/join")
+    public ResponseEntity<?> joinGroupChatRoom(
+            @PathVariable("roomId") Long roomId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        chatService.addParticipantToGroupChat(roomId, userDetails.getUsername());
+        return ResponseEntity.ok().build();
     }
 }

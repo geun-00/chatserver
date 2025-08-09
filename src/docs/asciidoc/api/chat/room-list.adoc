@@ -7,5 +7,5 @@ include::{snippets}/chat-room-list/http-request.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/chat-room-list/response-body.adoc[]
+include::{snippets}/chat-room-list/http-response.adoc[]
 include::{snippets}/chat-room-list/response-fields.adoc[]
